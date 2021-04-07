@@ -68,9 +68,6 @@ LRESULT CALLBACK WindowProc(
 	LPARAM lParam
 )
 {
-	int xCenter;
-	int yCenter;
-	HDC hdc;
 	switch (uMsg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -84,15 +81,15 @@ LRESULT CALLBACK WindowProc(
 		TrackMouseEvent(&trackMouseEvent);
 		return 0;
 
-	case WM_PAINT:
+	case WM_PAINT: {
 		PAINTSTRUCT paintStruct;
 
 		RECT currentRect;
 		GetClientRect(hwnd, &currentRect);
-		xCenter = (currentRect.right - currentRect.left) / 2;
-		yCenter = (currentRect.bottom - currentRect.top) / 2;
+		int xCenter = (currentRect.right - currentRect.left) / 2;
+		int yCenter = (currentRect.bottom - currentRect.top) / 2;
 
-		hdc = BeginPaint(hwnd, &paintStruct);
+		HDC hdc = BeginPaint(hwnd, &paintStruct);
 
 		switch (CurrentClientPart) {
 		case 1: {
@@ -139,13 +136,14 @@ LRESULT CALLBACK WindowProc(
 
 		EndPaint(hwnd, &paintStruct);
 		return 0;
-
+	}
 	case WM_MOUSELEAVE:
 		if (isCursorInClienPart) {
 			CurrentClientPart = 0;
 			isCursorInClienPart = FALSE;
 			InvalidateRect(hwnd, NULL, TRUE);
 		}
+
 		return 0;
 
 	case WM_MOUSEMOVE:
